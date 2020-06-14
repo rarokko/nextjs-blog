@@ -5,10 +5,10 @@ AWS.config.update({
   region: 'us-east-2'
 });
 
-var credentials = new AWS.SharedIniFileCredentials({
-  profile: 'beatlog'
-});
 AWS.config.credentials = credentials;
+
+
+console.log(AWS.config.credentials);
 
 // Create the DynamoDB service object
 var ddb = new AWS.DynamoDB({
