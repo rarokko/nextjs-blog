@@ -5,8 +5,9 @@ import { listUsers } from './api/dynamo_scan'
 // import { getSortedPostsData } from '../lib/posts'
 import Link from 'next/link'
 import Date from '../components/date'
+import { User } from '../models/User'
 
-export default function Home({ users }) {
+export default function Home({ users }: { users: Array<User> }) {
   return (
     <Layout home>
       <Head>
@@ -23,7 +24,7 @@ export default function Home({ users }) {
         <h2 className={utilStyles.headingLg}>Usernames</h2>
         <ul className={utilStyles.list}>
           {users.map(({ username }, index) => {
-            return (<li key={`user_${index}`}>{username['S']}</li>)
+            return (<li key={`user_${index}`}>{username}</li>)
           })}
         </ul>
       </section>
@@ -33,7 +34,7 @@ export default function Home({ users }) {
 
 export async function getStaticProps() {
   try {
-    const users = await listUsers();
+    const users: Array<User> = await listUsers();
 
     return {
       props: {

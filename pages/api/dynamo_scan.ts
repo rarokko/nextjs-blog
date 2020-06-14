@@ -3,8 +3,7 @@ import { User } from '../../models/User';
 
 const ddb = require('./dynamo_connect');
 
-export function listUsers(): Promise<Array<User>> {
-
+export function listUsers(): Promise<Array<User>> {   
   return new Promise((resolve, reject) => {
   
     var params = {
@@ -19,6 +18,7 @@ export function listUsers(): Promise<Array<User>> {
         resolve(users);
       }
     });
+    
   })
 }
 
