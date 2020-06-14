@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Layout, { siteTitle } from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
-import { listUsers } from '../pages/api/dynamo_scan'
+import { listUsers } from '../api/dynamo_scan'
 // import { getSortedPostsData } from '../lib/posts'
 import Link from 'next/link'
 import Date from '../components/date'
@@ -22,8 +22,8 @@ export default function Home({ users }) {
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Usernames</h2>
         <ul className={utilStyles.list}>
-          {users.map(({ username }) => {
-            return (<li>{username['S']}</li>)
+          {users.map(({ username }, index) => {
+            return (<li key={`user_${index}`}>{username['S']}</li>)
           })}
         </ul>
       </section>
