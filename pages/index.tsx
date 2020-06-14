@@ -24,7 +24,7 @@ export default function Home({ users }: { users: Array<User> }) {
         <h2 className={utilStyles.headingLg}>Usernames</h2>
         <ul className={utilStyles.list}>
           {users.map(({ username }, index) => {
-            return (<li key={`user_${index}`}>{username}</li>)
+            return (<li key={`user_${index}`}>{username['S']}</li>)
           })}
         </ul>
       </section>
