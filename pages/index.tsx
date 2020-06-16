@@ -6,43 +6,83 @@ import { listUsers } from './api/dynamo_scan'
 import Link from 'next/link'
 import Date from '../components/date'
 import { User } from '../models/User'
+import ApolloClient, { gql } from 'apollo-boost';
+import { useQuery } from '@apollo/react-hooks';
+import { useEffect, useState } from 'react'
 
-export default function Home({ users }: { users: Array<User> }) {
+export default function Home() {
+  
+  // const client = new ApolloClient({
+  //   uri: 'api/dynamo_get'
+  // });
+
+  // function consultausuario(id) {
+  
+  //   client.query({
+  //     query: gql`
+  //       {
+  //         user(id: "${id}") {
+  //           username,
+  //           id,
+  //           email
+  //         }
+  //       }
+  //     `
+  //   })
+  //   .then((result) => {
+  //       console.log(result.data.user)
+  //       setuser(result.data.user)
+  //     }
+  //   )
+  //   .catch((err) => console.log(err))
+  // }
+
+  const [inputValue, setInputValue] = useState("");
+  const [user, setUser] = useState(null);
+  const { loading, error, data } = useQuery(gql`
+    {
+      user(id: "${inputValue || 1}") {
+        username,
+        id,
+        email
+      }
+    }
+  `);
+
+  if (loading) return <p>Carregando</p>
+
   return (
     <Layout home>
       <Head>
         <title>{siteTitle}</title>
       </Head>
       <section className={utilStyles.headingMd}>
-        <p>[Your Self Introduction]</p>
-        <p>
-          (This is a sample website - you’ll be building and deploying a site like this in{' '}
-          <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
-        </p>
-      </section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>Usernames</h2>
-        <ul className={utilStyles.list}>
-          {users.map(({ username }, index) => {
-            return (<li key={`user_${index}`}>{username['S']}</li>)
-          })}
-        </ul>
+        <input value={inputValue} placeholder={"Digite o ID do Usuário"} onChange={(e) => setInputValue(e.target.value)} />
+        {/* <button onClick={() => consultaUsuario(inputValue)}>Consultar</button> */}
+
+        {data.user &&
+          <>
+            <p>{user.username}</p>
+            <p>{user.id}</p>
+            <p>{user.email}</p>
+          </>
+        }
       </section>
     </Layout>
   )
 }
 
-export async function getStaticProps() {
-  try {
-    const users: Array<User> = await listUsers();
+// export async function getStaticProps() {
+//   try {
+//     const users: Array<User> = await listUsers();
 
-    return {
-      props: {
-        users
-      }
-    }
+//     return {
+//       props: {
+//         users
+//       }
+//     }
 
-  } catch (e) {
-    console.log(e);
-  }
-}
+//   } catch (e) {
+//     console.log(e);
+//   }
+// }

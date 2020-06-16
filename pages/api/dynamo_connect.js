@@ -19,7 +19,7 @@ if (process.env.aws_access_key_id && process.env.aws_secret_access_key) {
 AWS.config.credentials = credentials;
 
 // Create the DynamoDB service object
-var ddb = new AWS.DynamoDB({
+var ddb = new AWS.DynamoDB.DocumentClient({
   apiVersion: '2012-08-10'
 });
 
