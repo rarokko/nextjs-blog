@@ -7,7 +7,7 @@ import Link from 'next/link'
 import Date from '../components/date'
 import { User } from '../models/User'
 import ApolloClient, { gql } from 'apollo-boost';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import { useEffect, useState } from 'react'
 
 export default function Home() {
@@ -38,8 +38,7 @@ export default function Home() {
   // }
 
   const [inputValue, setInputValue] = useState("");
-  const [user, setUser] = useState(null);
-  const { loading, error, data } = useQuery(gql`
+  const [consultaUsuario, { loading, error, data }] = useLazyQuery(gql`
     {
       user(id: "${inputValue || 1}") {
         username,
@@ -58,13 +57,13 @@ export default function Home() {
       </Head>
       <section className={utilStyles.headingMd}>
         <input value={inputValue} placeholder={"Digite o ID do Usuário"} onChange={(e) => setInputValue(e.target.value)} />
-        {/* <button onClick={() => consultaUsuario(inputValue)}>Consultar</button> */}
+        <button onClick={() => consultaUsuario()}>Consultar</button>
 
-        {data.user &&
+        {data && data.user &&
           <>
-            <p>{user.username}</p>
-            <p>{user.id}</p>
-            <p>{user.email}</p>
+            <p>{data.user.username}</p>
+            <p>{data.user.id}</p>
+            <p>{data.user.email}</p>
           </>
         }
       </section>
